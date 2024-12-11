@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ username }}</h1>
+<p>Email: {{ user_details['email'] }}</p>
+<p>Interests: {{ user_details['interests'] | join(', ') }}</p>
+
+<h2>Other Users</h2>
+<ul>
+  {% for other_user in other_users %}
+    <li><a href="{{ url_for('user', username=other_user) }}">{{ other_user }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
