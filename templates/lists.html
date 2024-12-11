@@ -1,13 +1,15 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+
   {% if lists %}
     <ul id="lists">
       {% for lst in lists %}
-        <li>
-          <a>
+
+        <li class="{{ 'complete' if is_list_completed(lst) else '' }}">
+          <a href="/lists/{{ lst['id'] }}">
             <h2>{{ lst["title"] }}</h2>
-            <p>{{ lst["todos"] | length }}</p>
+            <p>{{ todos_remaining(lst) }} / {{ lst["todos"] | length }}</p>
           </a>
         </li>
       {% endfor %}
