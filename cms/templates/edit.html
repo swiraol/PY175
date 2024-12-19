@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+  {% block content %}
+  <h1>Edit File</h1>
+
+  <form action="/cms/data/{{ filename }}" method="POST">
+    <textarea name="content">{{ content }}</textarea>
+    <button type="submit">Save Changes</button>
+  </form>
+  {% endblock %}

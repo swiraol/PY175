@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<form action="/cms/create" method='post'>
+  <p>Add a new document:</p>
+  <input type="text" name="filename" placeholder="Enter document name"/>
+  <button type="submit">Create</button>
+</form>
+{% endblock %}

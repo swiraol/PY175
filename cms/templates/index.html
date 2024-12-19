@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <a href="/cms/create">New Document</a>
+  <h1>File List</h1>
+  <ul>
+    {% for file in files %}
+      <li>
+        <a href="/cms/data/{{ file }}">{{ file }}</a>
+        <a href="/cms/data/{{ file }}/edit">Edit</a>
+        <form method="post" action="/cms/data/{{ file }}/delete">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+  {% if session.username %}
+    <form method="post" action="/users/signout">
+      <p>Signed in as {{ session.username }}.</p>
+      <button type="submit">Sign Out</button>
+    </form>
+  {% else %}
+    <p><a href="/users/signin">Sign in</a></p>
+  {% endif %}
+{% endblock %}
