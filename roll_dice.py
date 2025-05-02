@@ -42,12 +42,15 @@ while True:
     # GET /?rolls=2&sides=6 HTTP/1.1
     # 5
 
-    count = int(params["rolls"])
-    print("Count: ", count)
+    rolls = int(params.get("rolls", "1"))
+    print("Rolls: ", rolls)
+
+    sides = int(params.get("sides", "6"))
+    print("Sides: ", sides)
 
     result = ""
-    for _ in range(count):
-        roll = random.randint(1, 6)
+    for _ in range(rolls):
+        roll = random.randint(1, sides)
         result += f"Roll: {roll}\n"
     
     response_body += f"{result}"
