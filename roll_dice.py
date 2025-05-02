@@ -1,5 +1,3 @@
-# Highlighted lines indicate changes from echo_server.py
-
 import socket
 import random
 
@@ -18,82 +16,45 @@ while True:
     if not request or 'favicon.ico' in request:
         client_socket.close()
         continue
-    
+
     request_line = request.splitlines()[0]
-    print("Request Line: ", request_line) # GET /?rolls=2&sides=6 HTTP/1.1
+    http_method, path_and_params, _ = request_line.split(" ")
 
-    http_method, path, _ = request_line.split(" ")
-    path, params = path.split("?")
-    print("HTTP Method: ", http_method) # GET
-    print("Path: ", path) # /
-    print("Parameters: ", params) # rolls=2&sides=6
-    params = params.split("&") # ["rolls=2", "sides=6"]
-    print("Parameters: ", params)
-    params = {param.split("=")[0]: param.split("=")[1] for param in params}
-    print("Parameters: ", params)
+    if '?' in path_and_params:
+        path, params = path_and_params.split("?")
+    else:
+        path = path_and_params
+        params = 'number=0'
+
+    params = params.split("&")
+    print("params: ", params)
+    params_dict = {}
+    for param in params:
+        key, value = param.split("=")
+        params_dict[key] = value
     
-    response_body = (
-        "<!DOCTYPE html>\n"
-        "<html lang=\"en\">\n"
-        "<head>\n"
-        "<meta charset=\"utf-8\">\n"
-        "<title>HTML Response</title>\n"
-        "<style>\n"
-        "html {\n"
-        "   margin: 0;\n"
-        "   padding: 0;\n"
-        "}\n"
-        "body {\n"
-        "   margin-left: 20px;"
-        "   color: green;"
-        "}\n"
-        ".roll {\n"
-        "   padding: 5px;\n"
-        "   border: solid 1px black;\n"
-        "   display: block;\n"
-        "   width: 25%\n"
-        "}\n"
-        "h2, h4 {\n"
-        "   display: inline-block;\n"
-        "}\n"
-        # "div {\n"
-        # "   display:block;\n"
-        # "}\n"
-        "</style>"
-        "</head>\n"
-        "<body>\n"
-        "<div>\n"
-        f"<h2>Request Line: <h4>{request_line}</h4></h2>\n"
-        "</div>\n"
-        "<div>\n"
-        f"<h2>HTTP Method: <h4>{http_method}</h4></h2>\n"
-        "</div>\n"
-        "<div>\n"
-        f"<h2>Path: <h4>{path}</h4></h2>\n"
-        "</div>\n"
-        f"<h2>Parameters: <h4>{params}</h4></h2>\n"
-    )
-    print("Response Body: ", response_body)
-    # GET /?rolls=2&sides=6 HTTP/1.1
-    # 5
+    number = int(params_dict.get('number', 0))
 
-    rolls = int(params.get("rolls", "1"))
-    print("Rolls: ", rolls)
+    response_body = ("<html><head><title>Counter</title></head><body>"
+                     f"<h1>HTTP Request Information:</h1>"
+                     f"<p><strong>Request Line:</strong> {request_line}</p>"
+                     f"<p><strong>HTTP Method:</strong> {http_method}</p>"
+                     f"<p><strong>Path:</strong> {path}</p>"
+                     f"<p><strong>Parameters:</strong> {params_dict}</p>"
+                     "<h2>Counter:</h2>"
+                     f'<p style="color: red;">The current number is: {number}</p>'
+                     '<div style="text-align: center;">'
+                     f"<a href='?number={number + 1}' style='margin-right: 2%; box-sizing: border-box; display: inline-block; width: 30%; color: white; background-color: gray; text-decoration: none; padding:10px 20px;border: 1px solid black;'>Add one</a>"
+                    #  "&nbsp;&nbsp;"
+                     f"<a href='?number={number - 1}' style='margin-left: 2%; box-sizing: border-box; display: inline-block; width: 30%; color: white; background-color: gray; text-decoration: none; padding:10px 20px;border: 1px solid black;'>Subtract one</a>"
+                     '</div>'
+                     "</body></html>")
 
-    sides = int(params.get("sides", "6"))
-    print("Sides: ", sides)
-
-    for _ in range(rolls):
-        roll = random.randint(1, sides)
-        response_body += f"<h2 class=\"roll\">Roll: {roll}</h2>\n"
-    
-    response_body += f"</body>\n</html>\n"
-    
     response = ("HTTP/1.1 200 OK\r\n"
                 "Content-Type: text/html\r\n"
                 f"Content-Length: {len(response_body)}\r\n"
                 "\r\n"
-                f"{response_body}\n")
+                f"{response_body}")
 
     client_socket.sendall(response.encode())
     client_socket.close()
