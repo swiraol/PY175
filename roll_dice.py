@@ -33,10 +33,45 @@ while True:
     print("Parameters: ", params)
     
     response_body = (
-        f"Request Line: {request_line}\n"
-        f"HTTP Method: {http_method}\n"
-        f"Path: {path}\n"
-        f"Parameters: {params}\n"
+        "<!DOCTYPE html>\n"
+        "<html lang=\"en\">\n"
+        "<head>\n"
+        "<meta charset=\"utf-8\">\n"
+        "<title>HTML Response</title>\n"
+        "<style>\n"
+        "html {\n"
+        "   margin: 0;\n"
+        "   padding: 0;\n"
+        "}\n"
+        "body {\n"
+        "   margin-left: 20px;"
+        "   color: green;"
+        "}\n"
+        ".roll {\n"
+        "   padding: 5px;\n"
+        "   border: solid 1px black;\n"
+        "   display: block;\n"
+        "   width: 25%\n"
+        "}\n"
+        "h2, h4 {\n"
+        "   display: inline-block;\n"
+        "}\n"
+        # "div {\n"
+        # "   display:block;\n"
+        # "}\n"
+        "</style>"
+        "</head>\n"
+        "<body>\n"
+        "<div>\n"
+        f"<h2>Request Line: <h4>{request_line}</h4></h2>\n"
+        "</div>\n"
+        "<div>\n"
+        f"<h2>HTTP Method: <h4>{http_method}</h4></h2>\n"
+        "</div>\n"
+        "<div>\n"
+        f"<h2>Path: <h4>{path}</h4></h2>\n"
+        "</div>\n"
+        f"<h2>Parameters: <h4>{params}</h4></h2>\n"
     )
     print("Response Body: ", response_body)
     # GET /?rolls=2&sides=6 HTTP/1.1
@@ -48,15 +83,14 @@ while True:
     sides = int(params.get("sides", "6"))
     print("Sides: ", sides)
 
-    result = ""
     for _ in range(rolls):
         roll = random.randint(1, sides)
-        result += f"Roll: {roll}\n"
+        response_body += f"<h2 class=\"roll\">Roll: {roll}</h2>\n"
     
-    response_body += f"{result}"
-
+    response_body += f"</body>\n</html>\n"
+    
     response = ("HTTP/1.1 200 OK\r\n"
-                "Content-Type: text/plain\r\n"
+                "Content-Type: text/html\r\n"
                 f"Content-Length: {len(response_body)}\r\n"
                 "\r\n"
                 f"{response_body}\n")
