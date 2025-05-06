@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -21,14 +21,14 @@
 
           <ul class="pure-menu-list">
             {% for chapter in contents %}
-              <li class="pure-menu-item">
-                <a href="{{ url_for('chapter', page_num=loop.index) }}" class="pure-menu-link">{{ chapter }}</a>
-              </li>
+            <li class="pure-menu-item">
+              <a href="#" class="pure-menu-link">{{ chapter }}</a>
+            </li>
             {% endfor %}
           </ul>
         </div>
       </div>
-
+      
       <div id="main">
         <div class="header">
           <h1>The Adventures of Sherlock Holmes</h1>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="content">
-          {% block content %}{% endblock %}
+          {% block content %} {% endblock %}
         </div>
       </div>
     </div>
