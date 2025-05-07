@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h2 class="content-subhead">{{ chapter_title}}</h2>
+  <h2 class="content-subhead">Chapter {{ page_num }}: {{ chapter_titles[page_num - 1] }}</h2>
 
-  {{ chapter_content }}
+  {% for line in chapter_content %}
+    {{ line }}
+  {% endfor %}
 
 {% endblock %}

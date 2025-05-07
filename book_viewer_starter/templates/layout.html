@@ -20,9 +20,9 @@
           <a class="pure-menu-heading" href="{{ url_for('index') }}">Table of Contents</a>
 
           <ul class="pure-menu-list">
-            {% for chapter in contents %}
+            {% for chapter in chapter_titles %}
             <li class="pure-menu-item">
-              <a href="#" class="pure-menu-link">{{ chapter }}</a>
+              <a href="{{ url_for('chapter', page_num=loop.index) }}" class="pure-menu-link">Chapter {{ loop.index }}: {{ chapter }}</a>
             </li>
             {% endfor %}
           </ul>
