@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, redirect
+from flask import Flask, render_template, g, redirect, request
 import re
 
 app = Flask(__name__)
@@ -23,6 +23,7 @@ def index():
 
 @app.route("/chapters/<page_num>")
 def chapter(page_num):
+    print("page_num: ", page_num)
     if page_num.isdigit() and 1 <= int(page_num) <= len(g.contents):
         with open(f"book_viewer/data/chp{page_num}.txt", 'r') as file:
             chapter_content = file.read()
@@ -33,6 +34,21 @@ def chapter(page_num):
                             page_num=int(page_num))
     else:
         return redirect('/')
+
+@app.route("/search", endpoint='search')
+def search():
+    query = request.args.get('query', '')
+    results = {}
+    chp_count = len(g.contents)
+    if query:
+        for chp_num in range(1, chp_count + 1):
+            with open(f"book_viewer/data/chp{chp_num}.txt") as file:
+                content = file.read()
+                if query.casefold() in content.casefold():
+                    title = g.contents[chp_num - 1]
+                    results[chp_num] = title
+    
+    return render_template('search.html', query=query, results=results, chapter_titles=g.contents)
 
 @app.errorhandler(404)
 def page_not_found(error):
