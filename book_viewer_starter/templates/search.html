@@ -9,8 +9,15 @@
   {% if results %}
     <h2 class="content-subhead">Results for '{{ query }}'</h2>
     <ul>
-      {% for key in results %}
-        <li><a href="{{ url_for('chapter', page_num=key) }}">{{ results[key] }}</a></li>
+      {% for chp, data in results.items() %}
+        <li>
+          <h4>{{ data['title'] }}</h4>
+        </li>
+          <ul>
+            {% for index, paragraph in data['paragraphs'] %}
+              <li><a href="{{ url_for('chapter', page_num=chp) }}#paragraph{{ index }}">{{ paragraph }}</a></li>
+            {% endfor %}
+          </ul>
       {% endfor %}
     </ul>
   {% endif %}

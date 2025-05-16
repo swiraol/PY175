@@ -5,10 +5,7 @@ app = Flask(__name__)
 print(f"The value of __name__ in this module is {__name__}")
 
 def in_paragraphs(text):
-    paragraphs = text.split('\n\n')
-    
-    paragraphs = [f"<p>{paragraph}</p>" for paragraph in paragraphs]
-    return "".join(paragraphs)
+    return text.split('\n\n')
 
 app.jinja_env.filters['in_paragraphs'] = in_paragraphs
 
@@ -26,10 +23,10 @@ def chapter(page_num):
     print("page_num: ", page_num)
     if page_num.isdigit() and 1 <= int(page_num) <= len(g.contents):
         with open(f"book_viewer/data/chp{page_num}.txt", 'r') as file:
-            chapter_content = file.read()
+            paragraphs = file.read()
     
         return render_template('chapter.html', 
-                            chapter_paragraphs=chapter_content, 
+                            chapter_paragraphs=paragraphs, 
                             chapter_titles=g.contents,
                             page_num=int(page_num))
     else:
@@ -42,11 +39,23 @@ def search():
     chp_count = len(g.contents)
     if query:
         for chp_num in range(1, chp_count + 1):
+            temp_lst = []
+            title = g.contents[chp_num - 1]
             with open(f"book_viewer/data/chp{chp_num}.txt") as file:
-                content = file.read()
-                if query.casefold() in content.casefold():
-                    title = g.contents[chp_num - 1]
-                    results[chp_num] = title
+                single_string = file.read()
+                paragraphs = single_string.split("\n\n")
+                for index, paragraph in enumerate(paragraphs, start=1):
+                    if query.casefold() in paragraph.casefold():
+                        temp_lst.append([index, paragraph])
+                print("temp list: ", temp_lst)
+
+                if temp_lst:
+                    print("temp_lst: ", temp_lst)
+                    results[chp_num] = {
+                        'title': title,
+                        'paragraphs': temp_lst
+                    }
+                print("results: ", results)
     
     return render_template('search.html', query=query, results=results, chapter_titles=g.contents)
 

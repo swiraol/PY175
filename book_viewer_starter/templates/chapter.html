@@ -2,7 +2,7 @@
 
 {% block content %}
   <h2 class="content-subhead">Chapter {{ page_num }}: {{ chapter_titles[page_num - 1] }}</h2>
-
-  {{ chapter_paragraphs | in_paragraphs | safe }}
-
+  {% for paragraph in chapter_paragraphs | in_paragraphs %}
+    <p id="paragraph{{ loop.index }}">{{ paragraph | safe }}</p>
+  {% endfor %}
 {% endblock %}
