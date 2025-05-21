@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block main %}
+  <h1>{{ username }}</h1>
+  <h2>Email: {{ email }}</h2>
+  <h2>Interests: {{ interests }}</h2>
+{% endblock %}
+
+{% block other_users %}
+  {% for other_user in usernames | show_other_users(username) %}
+    <ul style="list-style-type: none;">
+      <li><h3><a href="{{ url_for('user', username=other_user) }}">{{ other_user }}</a></h3></li>
+    </ul>
+  {% endfor %}
+{% endblock %}
+

@@ -1,0 +1,8 @@
+{% block main %}
+{% endblock %}
+<div class="fixed_bottom_container" style="position: fixed; bottom: 0;">
+  {% set tup = usernames | get_user_info(user_info) %}
+    <h2>There are {{ tup[0] }} users with a total of {{ tup[1] }} interests.<h2>
+  {% block other_users %}
+  {% endblock %}
+</div>

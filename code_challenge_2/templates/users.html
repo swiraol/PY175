@@ -1,3 +1,7 @@
-{% for user in usernames %}
-  <h1>{{ user }}</h1>
-{% endfor %}
+{% extends "layout.html" %}
+
+{% block main %}
+  {% for user in usernames %}
+    <h1><a href="{{url_for('user', username=user)}}">{{ user }}</a></h1>
+  {% endfor %}
+{% endblock %}
