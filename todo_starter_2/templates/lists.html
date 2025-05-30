@@ -1,9 +1,6 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  {% if success_msg %}
-    {{ success_msg }}
-  {% endif %}
   {% if lists %}
     {% for lst in lists %}
       <ul id="lists">
