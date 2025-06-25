@@ -20,13 +20,11 @@
         <label for="list_title">Enter the new title for the list:</label>
       </dt>
       <dd>
-        <input type="text" name="title" placeholder="List Title" value="{{ title if title is defined else todo_lst['title'] }}">
+        <input type="text" name="title" placeholder="Title" value="{{ title if title is defined else todo_lst['title'] }}">
       </dd>
     </dl>
     <fieldset>
-      <form action="/lists/{{ todo_lst.id }}">
-        <input type="submit" value="Save">
-      </form>
+      <input type="submit" value="Save">
       <a href="{{ url_for('show_list', list_id=todo_lst.id) }}">Cancel</a>
     </fieldset>
   </form>

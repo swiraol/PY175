@@ -74,7 +74,7 @@ def get_lists():
 
 @app.route('/lists', methods=["POST"])
 def create_list():
-    title = request.form.get('list_title', None).strip()
+    title = request.form.get('list_title', "").strip()
     lists = session['lists']
 
     error = error_for_list_title(title, lists)

@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <section id="todos" class="{{ 'completed' if is_list_completed(todo_lst) else '' }}">
+  <section id="todos" class="{{ 'complete' if is_list_completed(todo_lst) else '' }}">
     <header>
       <h2>{{ todo_lst.title }}</h2>
       <ul>
         <li>
           <form class="complete_all"
-                action="{{ url_for('show_list', list_id=todo_lst.id)}}"
+                action="{{ url_for('get_lists') }}"
                 method="post">
                 <button class="check" type="submit">Complete All</button>
           </form>
