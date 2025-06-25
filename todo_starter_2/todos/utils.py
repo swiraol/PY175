@@ -38,26 +38,10 @@ def is_list_completed(lst):
 def is_todo_completed(todo):
     return todo['completed']
 
-# def sort_todos(todos):
-#     sorted_todos = sorted(todos, key=lambda todo: todo['title'].casefold())
-
-#     incomplete_todos = [todo for todo in todos if not is_todo_completed(todo)]
-#     completed_todos = [todo for todo in todos if is_todo_completed(todo)]
-
-#     return incomplete_todos + completed_todos
-
-# def sort_lists(lists):
-#     sorted_lists = sorted(lists, key=lambda lst: lst['title'].casefold())
-
-#     incomplete_lists = [lst for lst in sorted_lists if not is_list_completed(lst)]
-#     completed_lists = [lst for lst in sorted_lists if is_list_completed(lst)]
-    
-#     return incomplete_lists + completed_lists
-
 def sort_items(items, func):
     sorted_items = sorted(items, key=lambda item: item['title'].casefold())
 
     incomplete_list = [item for item in sorted_items if not func(item)]
     completed_list = [item for item in sorted_items if func(item)]
 
-    return completed_list + incomplete_list
+    return incomplete_list + completed_list
