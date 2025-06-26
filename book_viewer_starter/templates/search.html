@@ -15,7 +15,7 @@
         </li>
           <ul>
             {% for index, paragraph in data['paragraphs'] %}
-              <li><a href="{{ url_for('chapter', page_num=chp) }}#paragraph{{ index }}">{{ paragraph }}</a></li>
+              <li><a href="{{ url_for('chapter', page_num=chp) }}#paragraph{{ index }}">{{ paragraph | view_helper(query) | safe }}</a></li>
             {% endfor %}
           </ul>
       {% endfor %}

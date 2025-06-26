@@ -7,6 +7,16 @@ print(f"The value of __name__ in this module is {__name__}")
 def in_paragraphs(text):
     return text.split('\n\n')
 
+def view_helper(text, query):
+    result = text.split(query)
+    print("result: ", result)
+    query = f"<strong>{query}</strong>"
+    
+    return query.join(result)
+
+
+app.jinja_env.filters['view_helper'] = view_helper
+
 app.jinja_env.filters['in_paragraphs'] = in_paragraphs
 
 @app.before_request
