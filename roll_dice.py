@@ -2,56 +2,55 @@ import socket
 import random
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-server_socket.bind(('127.0.0.1', 3003))
+server_socket.bind(('localhost', 3003))
 server_socket.listen()
 
-print("Server is running on 127.0.0.1:3003")
+print("Server is running on localhost:3003")
 
 while True:
     client_socket, addr = server_socket.accept()
     print(f"Connection from {addr}")
-    request = client_socket.recv(1024).decode()
 
-    if (not request) or ('favicon.ico' in request):
+    request = client_socket.recv(1024).decode()
+    if not request or 'favicon.ico' in request:
         client_socket.close()
         continue
 
     request_line = request.splitlines()[0]
-    print(f"request_line: {request_line}")
-    http_method = request_line.split()[0]
-    print(f"http_method: {http_method}")
-    path = request_line.split()[1].split("?")[0]
-    print(f"path: {path}")
-    rolls = request_line.split()[1].split("?")[1].split("&")[0].split("=")
-    rolls = rolls[1]
-    print(f"rolls: {rolls}")
-    sides = request_line.split()[1].split("?")[1].split("&")[1].split("=")
-    sides = sides[1]
-    print(f"sides: {sides}")
-    params = {}
-    params['rolls'] = rolls
-    params['sides'] = sides
-    print(f"params: {params}")
+    http_method, path_and_params, _ = request_line.split(" ")
+    # print(f"path_and_params: {path_and_params}")
+    if "?" not in path_and_params:
+        path = path_and_params
+        params = "number=0"
+    else:
+        path, params = path_and_params.split("?")
 
-    def roll_dice(num):
-        result = []
-        for _ in range(num):
-            roll = random.randint(1, int(sides))
-            result.append(roll)
-        
-        return result
+    params = params.split("&")
+    params_dict = {}
+    for param in params:
+        key, value = param.split("=")
+        params_dict[key] = value
     
-    dice_rolls = roll_dice(int(rolls))
-    
-    response_body = f"<html>Request Line: {request_line}\nHTTP Method: {http_method}\nPath: {path}\nParameters: {params}\n{"\n".join([f"Roll: {roll}" for roll in dice_rolls])}\n</html>"
-    
-    print(f"response_body: {response_body}")
+    number = int(params_dict.get('number', 0))
+
+    response_body = ("<html><head><title>Counter</title></head><body>"
+                     f"<h1>HTTP Request Information:</h1>"
+                     f"<p><strong>Request Line:</strong> {request_line}</p>"
+                     f"<p><strong>HTTP Method:</strong> {http_method}</p>"
+                     f"<p><strong>Path:</strong> {path}</p>"
+                     f"<p><strong>Parameters:</strong> {params_dict}</p>"
+                     "<h2>Counter:</h2>"
+                     f'<p style="color: red;">The current number is: {number}</p>'
+                     f"<a href='?number={number + 1}'>Add one</a>"
+                     "&nbsp;&nbsp;"
+                     f"<a href='?number={number - 1}'>Subtract one</a>"
+                     "</body></html>")
 
     response = ("HTTP/1.1 200 OK\r\n"
                 "Content-Type: text/html\r\n"
                 f"Content-Length: {len(response_body)}\r\n"
                 "\r\n"
-                f"{response_body}\n")
+                f"{response_body}")
+
     client_socket.sendall(response.encode())
     client_socket.close()
