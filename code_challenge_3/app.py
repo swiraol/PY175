@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, redirect, url_for
 import yaml 
 
 app = Flask(__name__)
@@ -12,23 +12,28 @@ def load_contents():
         g.storage = yaml.safe_load(file)
         g.users = [user for user in g.storage]
 
-        g.interest_count = 0
+        result_lst = []
         for v in g.storage.values():
-            g.interest_count += get_total_interests(v['interests'])
+            for interest in v['interests']:
+                result_lst.append(interest)
+        
+        g.interest_count = get_total_interests(result_lst)
 
 @app.route('/')
 def index():
+    return redirect(url_for('users'))
+
+@app.route('/users')
+def users():
     return render_template('index.html')
 
 @app.route('/users/<name>')
 def user(name):
-    for k, v in g.storage.items():
-        print("g.storage.items(): ", g.storage.items())
-        if k == name:
-            email = v['email']
-            interests = v['interests']
+    user_info = g.storage.get(name)
+    if not user_info:
+        return redirect(url_for('users'))
                 
-    return render_template('user.html', name=name, email=email, interests=interests)
+    return render_template('user.html', name=name, email=user_info['email'], interests=user_info['interests'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
