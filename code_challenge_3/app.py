@@ -22,7 +22,8 @@ def index():
 
 @app.route('/users')
 def users():
-    return render_template('index.html')
+    users = [user for user in g.storage]
+    return render_template('index.html', users=users)
 
 @app.route('/users/<name>')
 def user(name):

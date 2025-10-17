@@ -12,9 +12,11 @@
   {% endif %}
 
 <h2>Other users:</h2>
-  {% for user in users %}
-    {% if user != name %}
-      <ul><li><a href="{{ url_for('user', name=user) }}">{{ user }}</a></li></ul>
-    {% endif %}
-  {% endfor %}
+  <ul>
+    {% for user in users %}
+      {% if user != name %}
+        ><li><a href="{{ url_for('user', name=user) }}">{{ user }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
 {% endblock %}
