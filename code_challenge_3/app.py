@@ -4,11 +4,8 @@ import yaml
 app = Flask(__name__)
 
 def get_total_interests(dict):
-    result_lst = []
-    for v in dict.values():
-        for interest in v['interests']:
-            result_lst.append(interest)
-    return len(result_lst)
+    result = [interest for v in dict.values() for interest in v['interests']]
+    return len(result)
 
 @app.before_request
 def load_contents():
