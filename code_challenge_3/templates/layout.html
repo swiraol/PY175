@@ -5,11 +5,13 @@
 <body>
   {% block content %}
   {% endblock %}
+  
+  <footer>
+    {% block footer %}
+        <h2>There are {{ g.users | length }} users with a total of {{ g.interest_count }} interests</h2>
+    {% endblock %}
+</footer>
 </body>
 
-<footer>
-  {% block footer %}
-      <h2>There are {{ g.users | length }} users with a total of {{ g.interest_count }} interests</h2>
-  {% endblock %}
-</footer>
+
 </html>
